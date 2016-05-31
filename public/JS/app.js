@@ -1,9 +1,15 @@
 var name = getQueryVariable("name") || 'Anomoyous';
 var room = getQueryVariable("room");
 var socket = io();
-console.log(name+" "+room);
+
+jQuery(".room-title").append(room);
 socket.on('connect',function()
-         {
+{
+    socket.emit('joinRoom',
+               {
+        name:name,
+        room:room
+    });
     console.log("connected to socket.io server!");
 });
 
@@ -20,7 +26,7 @@ socket.on("message",function(message)
     
 });
 
-var $form = jQuery('#message-form');
+var $form = jQuery("#message-form");
 
 $form.on('submit',function(event){
     event.preventDefault();

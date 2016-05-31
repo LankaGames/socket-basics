@@ -4,15 +4,27 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var moment = require('moment');
+var clientInfo = {};
 
 io.on('connection',function(socket)
      {
+    
+    socket.on("joinRoom",function(req)
+    {
+        socket.join(req.room);
+        clientInfo[socket.id] = req;
+        socket.broadcast.to(req.room).emit('message',{
+            name:"System",
+            text:req.name+" has Joined",
+            timeStamp:moment.valueOf()
+        })
+    });
     
     socket.on("message",function(message)
              {
         console.log("message recieved:"+message.text);
         message.timeStamp = moment().valueOf();
-        io.emit("message",message);
+        io.to(clientInfo[socket.id].room).emit("message",message);
         
     })
     
