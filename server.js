@@ -19,7 +19,8 @@ io.on('connection',function(socket)
     console.log("user connected to socket.io");
     socket.emit("message", {
         text:"Welcome to chat app",
-        timeStamp :moment().valueOf()
+        timeStamp :moment().valueOf(),
+        name:"System"
     });
 });
 
